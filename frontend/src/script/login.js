@@ -1,4 +1,4 @@
-function submitForm() {
+function Login() {
 
   
     // Obtém os valores de email e senha
