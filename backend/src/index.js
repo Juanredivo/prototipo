@@ -16,14 +16,15 @@ app.get('/', (req, res) => {
 
 app.post('/login', (request, response) => {
 
+  
   const {email, senha } = request.body;
 
   connection.query(`SELECT * FROM Users WHERE email = '${email}'`, (err, rows, fields) => {
     if (! rows || ! email || ! senha) {
       return response.status(400).send('Conta ou senha inválida');
     }
-
-    if (senha == rows[0].password && rows[0].email == email) {
+    const thePasswordIsValid = bcrypt.compareSync(senha, rows[0].password );
+    if (thePasswordIsValid && rows[0].email == email) {
       response.status(200).send("Efetuado co sucesso");
     } else {
       return response.status(400).send('Conta ou senha inválida');
@@ -36,7 +37,7 @@ app.post('/register', (request, response) => {
   try {
 
     const { fullName, email, phoneNumber, password, confirmPassword } = request.body;
-
+    console.log( fullName, email, phoneNumber, password, confirmPassword )
     if (password !== confirmPassword) {
       return response.status(400).send('A senha e a confirmação de senha não correspondem');
     }

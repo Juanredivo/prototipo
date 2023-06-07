@@ -1,8 +1,9 @@
 function register() {
+
   const fullName = document.getElementById('full-name').value;
   const email = document.getElementById('email').value;
-  const senha = document.getElementById('senha').value;
-  const confirmPassword = document.getElementById('confirmPassword').value;
+  const password = document.getElementById('password').value;
+  const confirmPassword = document.getElementById('confirm-password').value;
   const phoneNumber = document.getElementById('phone-number').value;
 
   fetch('http://localhost:3000/register', {
@@ -13,7 +14,7 @@ function register() {
     body: JSON.stringify({
       fullName: fullName,
       email: email,
-      senha: senha,
+      password: password,
       confirmPassword: confirmPassword,
       phoneNumber: phoneNumber
     })
@@ -32,4 +33,4 @@ function register() {
 }
 
 
-document.getElementById('register-button').addEventListener('click', register);
+

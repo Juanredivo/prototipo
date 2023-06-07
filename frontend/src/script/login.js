@@ -42,7 +42,7 @@ function Login() {
       });
   }
   
-  document.getElementById('btn-login').addEventListener('click', submitForm);
+
   
 
 
