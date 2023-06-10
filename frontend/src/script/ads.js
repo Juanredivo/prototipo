@@ -14,3 +14,17 @@ adsImages.forEach((image) => {
     });
   });
 });
+
+function mostrarNoticias() {
+    document.getElementById("noticias").style.display = "flex";
+    document.getElementById("indicacoes").style.display = "none";
+    document.querySelector(".benefits__type-btn.arg").classList.add("active");
+    document.querySelector(".benefits__type-btn.pub").classList.remove("active");
+  }
+
+  function mostrarIndicacoes() {
+    document.getElementById("noticias").style.display = "none";
+    document.getElementById("indicacoes").style.display = "flex";
+    document.querySelector(".benefits__type-btn.arg").classList.remove("active");
+    document.querySelector(".benefits__type-btn.pub").classList.add("active");
+  }

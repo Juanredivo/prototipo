@@ -4,3 +4,32 @@
     max-width: 800px;
     max-height: 800px;
   }
+  .benefits__type {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+  }
+
+  .benefits__type-btn {
+    padding: 8px 16px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    color: #000;
+    transition: color 0.3s;
+  }
+
+  .benefits__type-btn.active {
+    color: rgb(255, 255, 255);
+    font-weight: bold;
+    background-color: rgb(136, 17, 233);
+  }
+
+  .card {
+    margin-top: 20px;
+  }
+
+  .card-body {
+    text-align: center;
+  }
