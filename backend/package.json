@@ -4,7 +4,7 @@
   "description": "prototipo de trafego pago",
   "main": "index.js",
   "scripts": {
-    "start": "node --watch ./src/index.js"
+    "start": "node ./src/index.js"
   },
   "author": "Juan e Eduardo",
   "license": "ISC",

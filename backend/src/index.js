@@ -16,14 +16,15 @@ app.get('/', (req, res) => {
 
 app.post('/login', (request, response) => {
 
-  
-  const {email, senha } = request.body;
+
+  const { email, senha } = request.body;
 
   connection.query(`SELECT * FROM Users WHERE email = '${email}'`, (err, rows, fields) => {
-    if (! rows || ! email || ! senha) {
+    if (!rows || rows.length === 0 || !email || !senha) {
       return response.status(400).send('Conta ou senha inválida');
     }
-    const thePasswordIsValid = bcrypt.compareSync(senha, rows[0].password );
+
+    const thePasswordIsValid = bcrypt.compareSync(senha, rows[0].password);
     if (thePasswordIsValid && rows[0].email == email) {
       response.status(200).send("Efetuado co sucesso");
     } else {
@@ -37,7 +38,7 @@ app.post('/register', (request, response) => {
   try {
 
     const { fullName, email, phoneNumber, password, confirmPassword } = request.body;
-    console.log( fullName, email, phoneNumber, password, confirmPassword )
+    console.log(fullName, email, phoneNumber, password, confirmPassword)
     if (password !== confirmPassword) {
       return response.status(400).send('A senha e a confirmação de senha não correspondem');
     }
@@ -54,6 +55,26 @@ app.post('/register', (request, response) => {
     return response.status(500).send('Ocorreu um erro no registro');
   }
 });
+
+
+app.post('/contato', (request, response) => {
+  try {
+    const { nome, email, mensagem } = request.body;
+
+    connection.query(`INSERT INTO mensagens (nome, email, mensagem, data_envio) VALUES ('${nome}', '${email}', '${mensagem}', NOW());`, (err, rows, fields) => {
+      if (err) {
+        console.error(err);
+        return response.status(500).send('Ocorreu um erro ao enviar a mensagem');
+      }
+      
+      return response.status(200).send('Mensagem enviada com sucesso');
+    });
+  } catch (error) {
+    console.error(error);
+    return response.status(500).send('Ocorreu um erro ao enviar');
+  }
+});
+
 // Manipulador de erros global
 app.use((err, req, res, next) => {
   console.error(err);
