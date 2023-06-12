@@ -75,6 +75,27 @@ app.post('/contato', (request, response) => {
   }
 });
 
+app.get('/opcoes-ramo-regiao', (req, res) => {
+  const connection = mysql.createConnection(dbConfig);
+
+  const sql = `SELECT DISTINCT sp.nm_traffic_type AS ramo, ud.nm_location AS regiao 
+               FROM ServicePreferences sp
+               INNER JOIN UserDemographics ud ON sp.id_user = ud.id_user`;
+
+  connection.query(sql, (error, results) => {
+    if (error) {
+      console.error('Erro na consulta:', error);
+      res.status(500).json({ error: 'Erro ao obter as opções de ramo e região' });
+    } else {
+      const opcoesRamo = results.map(row => row.ramo);
+      const opcoesRegiao = results.map(row => row.regiao);
+      res.json({ ramo: opcoesRamo, regiao: opcoesRegiao });
+    }
+
+    connection.end();
+  });
+});
+
 // Manipulador de erros global
 app.use((err, req, res, next) => {
   console.error(err);
