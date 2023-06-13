@@ -1,5 +1,56 @@
+const logoutButton = document.createElement('button');
+logoutButton.classList.add('nav-link');
+logoutButton.innerText = 'Sair';
+
+window.addEventListener('DOMContentLoaded', function () {
+  const loginLink = document.getElementById('login-link');
+  const cadastroLink = document.getElementById('cadastro-link');
+  const orcamentoLink = document.getElementById('orcamento-link');
+
+
+  const isLoggedIn = localStorage.getItem('isLoggedIn');
+
+  if (isLoggedIn) {
+
+    if (loginLink && loginLink.parentNode) {
+      loginLink.parentNode.removeChild(loginLink);
+    }
+    if (cadastroLink && cadastroLink.parentNode) {
+      cadastroLink.parentNode.removeChild(cadastroLink);
+    }
+
+
+    const navbarNav = document.getElementById('navbarNav');
+    if (navbarNav) {
+      navbarNav.appendChild(logoutButton);
+    }
+    if (orcamentoLink && orcamentoLink.parentNode) {
+      orcamentoLink.style.display = 'block';
+    }
+  } else {
+    if (loginLink && loginLink.parentNode) {
+      loginLink.style.display = 'block';
+    }
+    if (cadastroLink && cadastroLink.parentNode) {
+      cadastroLink.style.display = 'block';
+    }
+    if (orcamentoLink && orcamentoLink.parentNode) {
+      orcamentoLink.style.display = 'none';
+    }
+
+    if (logoutButton && logoutButton.parentNode) {
+      logoutButton.parentNode.removeChild(logoutButton);
+    }
+  }
+
+  logoutButton.addEventListener('click', function () {
+    localStorage.clear();
+    location.reload();
+  });
+});
+
+
 function Login() {
-  // Obtém os valores de email e senha
   const email = document.getElementById('email').value;
   const senha = document.getElementById('senha').value;
 
@@ -12,7 +63,9 @@ function Login() {
   })
     .then(response => {
       if (response.ok) {
-        window.location.href = "index.html"; 
+        localStorage.setItem('isLoggedIn', true);
+
+        window.location.href = "index.html";
       } else if (response.status === 401) {
         console.log('Credenciais inválidas');
         throw new Error('Credenciais inválidas');
@@ -25,6 +78,3 @@ function Login() {
       console.error(error);
     });
 }
-
-
-
