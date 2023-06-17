@@ -96,7 +96,35 @@ app.get('/opcoes-ramo-regiao', (req, res) => {
   });
 });
 
-// Manipulador de erros global
+app.get('/ramos', (req, res) => {
+  connection.query('SELECT * FROM Ramos', (error, results) => {
+    if (error) {
+      console.error(error);
+      res.status(500).send('Erro ao obter os ramos do banco de dados');
+    } else {
+      res.json(results);
+    }
+  });
+});
+
+app.get('/planos', (req, res) => {
+  const { idRamo } = req.query;
+  if (!idRamo) {
+    res.status(400).send('ID do ramo não fornecido');
+    return;
+  }
+
+  connection.query('SELECT * FROM Planos WHERE id_ramo = ?', [idRamo], (error, results) => {
+    if (error) {
+      console.error(error);
+      res.status(500).send('Erro ao obter os planos do banco de dados');
+    } else {
+      res.json(results);
+    }
+  });
+});
+
+
 app.use((err, req, res, next) => {
   console.error(err);
   res.status(500).json({ message: 'Erro interno do servidor' });
