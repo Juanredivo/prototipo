@@ -54,16 +54,20 @@ function carregarRamos() {
           contratarLink.textContent = 'Contratar';
   
           const personalizarLink = document.createElement('a');
-          personalizarLink.href = '#'; 
+          personalizarLink.href = '#';
           personalizarLink.classList.add('btn', 'btn-secondary', 'ml-2');
           personalizarLink.textContent = 'Personalizar';
-  
+      
+          personalizarLink.addEventListener('click', () => {
+            abrirModalPersonalizacao(plano);
+          });
+      
           cardBody.appendChild(titulo);
           cardBody.appendChild(descricao);
           cardBody.appendChild(contratarLink);
           cardBody.appendChild(personalizarLink);
           card.appendChild(cardBody);
-  
+      
           planosContainer.appendChild(card);
         });
       })
@@ -86,4 +90,90 @@ function carregarRamos() {
       }
     });
   });
+  
+  function abrirModalPersonalizacao(plano) {
+    const modalTitulo = document.getElementById('modal-titulo');
+    const modalDescricao = document.getElementById('modal-descricao');
+    modalTitulo.textContent = plano.nome_plano;
+    modalDescricao.textContent = plano.descricao;
+  
+   
+    const emailUsuario = localStorage.getItem('email');
+    const modalEmail = document.getElementById('modal-email');
+    if (modalEmail) {
+      modalEmail.value = emailUsuario;
+    }
+  
+    const modalValor = document.getElementById('modal-valor');
+    const modalFacebookAds = document.getElementById('modal-facebook-ads');
+    const modalInstaAds = document.getElementById('modal-insta-ads');
+    const modalYoutubeAds = document.getElementById('modal-youtube-ads');
+    const modalGoogleAds = document.getElementById('modal-google-ads');
+  
+    if (modalValor) {
+      modalValor.value = ''; 
+    }
+    if (modalFacebookAds) {
+      modalFacebookAds.checked = false; 
+    }
+    if (modalInstaAds) {
+      modalInstaAds.checked = false; 
+    }
+    if (modalYoutubeAds) {
+      modalYoutubeAds.checked = false; 
+    }
+    if (modalGoogleAds) {
+      modalGoogleAds.checked = false; 
+    }
+  
+  
+    const personalizarLink = document.createElement('a');
+    personalizarLink.href = 'javascript:void(0)';
+    personalizarLink.classList.add('btn', 'btn-secondary', 'ml-2');
+    personalizarLink.textContent = 'Personalizar';
+  
+    personalizarLink.addEventListener('click', () => {
+      personalizarPlano(plano.id, modalValor.value, modalFacebookAds.checked, modalInstaAds.checked, modalYoutubeAds.checked, modalGoogleAds.checked);
+    });
+  
+
+    const modalFooter = document.getElementById('modal-footer');
+    if (modalFooter) {
+      modalFooter.innerHTML = ''; 
+      modalFooter.appendChild(personalizarLink);
+    }
+  
+  
+    $('#modalPersonalizacao').modal('show');
+  }
+  
+  
+  function personalizarPlano(planId, value, facebookAds, instaAds, youtubeAds, googleAds) {
+    const formData = new FormData();
+    formData.append('planId', planId);
+    formData.append('value', value);
+    formData.append('facebookAds', facebookAds);
+    formData.append('instaAds', instaAds);
+    formData.append('youtubeAds', youtubeAds);
+    formData.append('googleAds', googleAds);
+  
+    fetch('/personalizar-plano', {
+      method: 'POST',
+      body: formData
+    })
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw new Error('Erro ao personalizar o plano');
+      })
+      .then(data => {
+        console.log(data.message);
+        // Lógica adicional após o sucesso da personalização do plano
+      })
+      .catch(error => {
+        console.error('Erro ao personalizar o plano:', error);
+        // Lógica adicional para lidar com erros
+      });
+  }
   

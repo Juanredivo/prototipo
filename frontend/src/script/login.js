@@ -64,6 +64,8 @@ function Login() {
     .then(response => {
       if (response.ok) {
         localStorage.setItem('isLoggedIn', true);
+        localStorage.setItem('email', email);
+
 
         window.location.href = "index.html";
       } else if (response.status === 401) {

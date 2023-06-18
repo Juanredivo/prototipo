@@ -3,6 +3,7 @@ const cors = require('cors');
 const express = require('express');
 const database = require('./database');
 const app = express();
+const mysql = require('mysql2');
 const bcrypt = require('bcryptjs');
 app.use(cors());
 app.use(express.json());
@@ -122,6 +123,24 @@ app.get('/planos', (req, res) => {
       res.json(results);
     }
   });
+});
+
+app.post('/personalizar-plano', (req, res) => {
+
+  const { planId, value, facebookAds, instaAds, youtubeAds, googleAds } = req.body;
+
+  connection.query(
+    'INSERT INTO PlanosPersonalizados (id_plano, valor, facebook_ads, insta_ads, youtube_ads, google_ads) VALUES (?, ?, ?, ?, ?, ?)',
+    [planId, value, facebookAds, instaAds, youtubeAds, googleAds],
+    (error, results) => {
+      if (error) {
+        console.error('Erro ao salvar o plano personalizado:', error);
+        res.status(500).json({ error: 'Erro ao salvar o plano personalizado' });
+      } else {
+        res.json({ message: 'Plano personalizado salvo com sucesso!' });
+      }
+    }
+  );
 });
 
 
