@@ -54,7 +54,6 @@ function carregarRamos() {
           contratarLink.textContent = 'Contratar';
   
           const personalizarLink = document.createElement('a');
-          personalizarLink.href = '#';
           personalizarLink.classList.add('btn', 'btn-secondary', 'ml-2');
           personalizarLink.textContent = 'Personalizar';
       
@@ -109,7 +108,20 @@ function carregarRamos() {
     const modalInstaAds = document.getElementById('modal-insta-ads');
     const modalYoutubeAds = document.getElementById('modal-youtube-ads');
     const modalGoogleAds = document.getElementById('modal-google-ads');
-  
+    const modalValorMinimo = document.getElementById('modal-valor-minimo');
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+    const quantidadePlanosSelecionados = checkboxes.length;4
+
+    if (modalValor) {
+      const valorBase = parseFloat(plano.valor);
+      const valorTotal = valorBase + (50 * (quantidadePlanosSelecionados - 1));
+      modalValor.value = valorTotal.toFixed(2);
+    }
+    if (modalValorMinimo) {
+      const valorMinimo = parseFloat(plano.valor_minimo);
+      modalValorMinimo.textContent = `Valor mínimo: R$ ${valorMinimo.toFixed(2)}`;
+    }
+
     if (modalValor) {
       modalValor.value = ''; 
     }
@@ -128,9 +140,14 @@ function carregarRamos() {
   
   
     const personalizarLink = document.createElement('a');
-    personalizarLink.href = 'javascript:void(0)';
-    personalizarLink.classList.add('btn', 'btn-secondary', 'ml-2');
-    personalizarLink.textContent = 'Personalizar';
+    personalizarLink.href = '#';
+    personalizarLink.classList.add('btn', 'btn-primary', 'ml-2', 'btn-lg');
+    personalizarLink.setAttribute('data-dismiss', 'modal');
+    personalizarLink.setAttribute('aria-label', 'Close');
+    personalizarLink.textContent = 'Enviar';
+
+
+    
   
     personalizarLink.addEventListener('click', () => {
       personalizarPlano(plano.id, modalValor.value, modalFacebookAds.checked, modalInstaAds.checked, modalYoutubeAds.checked, modalGoogleAds.checked);
@@ -157,7 +174,7 @@ function carregarRamos() {
     formData.append('youtubeAds', youtubeAds);
     formData.append('googleAds', googleAds);
   
-    fetch('/personalizar-plano', {
+    fetch('http://localhost:3000/personalizar-plano', {
       method: 'POST',
       body: formData
     })
@@ -168,12 +185,10 @@ function carregarRamos() {
         throw new Error('Erro ao personalizar o plano');
       })
       .then(data => {
-        console.log(data.message);
-        // Lógica adicional após o sucesso da personalização do plano
+        alert(data.message);
       })
       .catch(error => {
         console.error('Erro ao personalizar o plano:', error);
-        // Lógica adicional para lidar com erros
       });
   }
   

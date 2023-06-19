@@ -62,19 +62,23 @@ app.post('/contato', (request, response) => {
   try {
     const { nome, email, mensagem } = request.body;
 
-    connection.query(`INSERT INTO mensagens (nome, email, mensagem, data_envio) VALUES ('${nome}', '${email}', '${mensagem}', NOW());`, (err, rows, fields) => {
-      if (err) {
-        console.error(err);
-        return response.status(500).send('Ocorreu um erro ao enviar a mensagem');
+    connection.query(
+      'INSERT INTO mensagens (nome, email, mensagem) VALUES (?, ?, ?)',
+      [nome, email, mensagem],
+      (err, rows, fields) => {
+        if (err) {
+          console.error(err);
+          return response.status(500).send('Ocorreu um erro ao enviar a mensagem');
+        }
+        return response.status(200).send('Mensagem enviada com sucesso');
       }
-      
-      return response.status(200).send('Mensagem enviada com sucesso');
-    });
+    );
   } catch (error) {
     console.error(error);
     return response.status(500).send('Ocorreu um erro ao enviar');
   }
 });
+
 
 app.get('/opcoes-ramo-regiao', (req, res) => {
   const connection = mysql.createConnection(dbConfig);
