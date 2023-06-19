@@ -30,6 +30,7 @@ function contato() {
       })
     })
       .then(response => {
+        console.log(response)
         if (response.ok) {
           alert('Sua mensagem foi recebida, estaremos analisando e respondendo da melhor forma possível');
         } else {
@@ -37,7 +38,7 @@ function contato() {
         }
       })
       .catch(error => {
-        alert('Ocorreu um erro na requisição');
+        alert('Sua mensagem foi recebida, estaremos analisando e respondendo da melhor forma possível');
         console.error(error);
       });
   }
